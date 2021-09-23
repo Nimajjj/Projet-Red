@@ -9,7 +9,9 @@ var MainMenu Menu
 
 type Choice struct {
   Name string
-  FLink func()
+  FLink func()  // activated func on use
+  FLinkArg func(interface{})  // alternate func usable but with an arg
+  Args [](interface{})        // arg for the FLinkArg func
 }
 
 type Menu struct {
@@ -19,12 +21,13 @@ type Menu struct {
 
 
 func InitMenus() {
-  CharacterInfo := Choice{"Character Sheet", CharacterSheet}
-  Inventory := Choice{"Inventory", Inventory}
-  Quit := Choice{"Quit", Quit}
+  characterInfo := Choice{"Character Sheet", CharacterSheet, NullArg, NullAI}
+  inventory := Choice{"Inventory", Player.displayInventory, NullArg, NullAI}
+  merchant := Choice{"Merchant", OpenMerchantMenu, NullArg, NullAI}
+  quit := Choice{"Quit", Quit, NullArg, NullAI}
 
-  ChoiceMainMenu := []Choice{CharacterInfo, Inventory, Quit}
-  MainMenu = Menu{"MainMenu", ChoiceMainMenu}
+  choiceMainMenu := []Choice{characterInfo, inventory, merchant, quit}
+  MainMenu = Menu{"MainMenu", choiceMainMenu}
 }
 
 
@@ -40,24 +43,26 @@ func DisplayMenu(MenuDisplayed Menu) {
 func ChoiceHandler(MenuDisplayed Menu) {
   choice := TakeIntInput()
   if choice == -1 || choice > len(MenuDisplayed.ChoiceArr) - 1 {
-    fmt.Println("Bad Input... Type 'exit' if stuck in loop.\n")
+    fmt.Println("Bad Input... Type 'exit' if stuck in loop.\nOr press 'enter' to come back to the last menu.")
+    if TakeStrInput() == "exit" {
+      os.Exit(0)
+    }
     DisplayMenu(MenuDisplayed)
     return
   }
-  MenuDisplayed.ChoiceArr[choice].FLink()
+  if len(MenuDisplayed.ChoiceArr[choice].Args) > 0 {
+    arg := MenuDisplayed.ChoiceArr[choice].Args[0]
+    MenuDisplayed.ChoiceArr[choice].FLinkArg(arg)
+  } else {
+    MenuDisplayed.ChoiceArr[choice].FLink()
+  }
 }
 
 
 func CharacterSheet() {
   Player.displaySheet()
-  WaitEnter()
+  DisplayMenu(MainMenu)
 }
-
-
-func Inventory() {
-  println("Inventory")
-}
-
 
 func Quit() {
   os.Exit(0)

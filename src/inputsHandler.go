@@ -6,6 +6,7 @@ import (
   "strconv"
 )
 
+
 func TakeIntInput() int {
   fmt.Print(">>> ")
   str, _ := BR.ReadString('\n')
@@ -20,6 +21,20 @@ func TakeIntInput() int {
 }
 
 
+func TakeStrInput() string {
+  fmt.Print(">>> ")
+  str, _ := BR.ReadString('\n')
+  if str[:len(str)-2] == "exit" {
+    os.Exit(0)
+  }
+  return str[:len(str)-2]
+}
+
 func WaitEnter() {
   BR.ReadString('\n')
+}
+
+
+func DisplayMainMenu() {
+  DisplayMenu(MainMenu)
 }
