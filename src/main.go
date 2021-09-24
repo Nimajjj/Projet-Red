@@ -11,13 +11,19 @@ var Player Character
 
 
 func main() {
+  var testMode = false
+
   log.SetFlags(log.LstdFlags | log.Lshortfile)
   Reader = bufio.NewReader(os.Stdin)
 
-  NewCharacter()
+  if testMode {
+    InitDefaultCharacter()
+  } else {
+    NewCharacter()
+    WaitEnter()
+  }
 
-  /*InitCharacter()
-  MainMenu()*/
+  MainMenu()
 }
 
 

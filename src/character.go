@@ -29,48 +29,49 @@ func (c *Character) init(name, race string, level, max_health, health int, inven
 
 
 func (c Character) displaySheet() {
-  fmt.Println("Name: ", c.Name)
-  fmt.Println("Race: ", c.Race)
-  fmt.Print("Health: ")
+  SlowPrint(c.Name, "'s sheet:\n")
+  SlowPrint(" Name: ", c.Name, "\n")
+  SlowPrint(" Race: ", c.Race, "\n")
+  SlowPrint(" Health: ")
   c.printHealth()
-  fmt.Print("Skills:\n")
+  SlowPrint(" Skills:\n")
   for _, skill := range(c.Skills) {
-    fmt.Print(" -", skill, "\n")
+    SlowPrint("   -", skill, "\n")
   }
-  fmt.Println()
+  WaitEnter()
 }
 
 
 func (c *Character) takePot() {
   if c.Health == c.HealthMax {
-    fmt.Println(c.Name, "has already all his HP.")
+    SlowPrint(c.Name, " has already all his HP.\n")
     return
   }
 
-  fmt.Println(c.Name, "drink a life potion.")
+  SlowPrint(c.Name, " drink a life potion.\n")
 
   c.addToHealth(30)
 
-  fmt.Print(c.Name, "'s HP: ")
+  SlowPrint(c.Name, "'s HP: ")
   c.printHealth()
 
   if c.Inventory["Life Potion"] != 0 {
     c.removeItem("Life Potion")
   } else {
-    fmt.Print(c.Name, " still have ", c.Inventory["Life Potion"], " life potion(s).\n")
+    SlowPrint(c.Name, " still have ", strconv.Itoa(c.Inventory["Life Potion"]), " life potion(s).\n")
   }
 
   fmt.Println()
 }
 
 func (c Character) printHealth() {
-  health_display := strconv.Itoa(c.Health) + "/" + strconv.Itoa(c.HealthMax)
-  if c.Health <= 25 {
-    fmt.Println(color.Ize(color.Red, health_display ) )
-  } else if c.Health > 65 {
-    fmt.Println(color.Ize(color.Green, health_display ) )
+  health_display := strconv.Itoa(c.Health) + "/" + strconv.Itoa(c.HealthMax) + "\n"
+  if c.Health <= (c.HealthMax / 3) {
+    SlowPrint(color.Ize(color.Red, health_display ) )
+  } else if c.Health > (c.HealthMax / 3) * 2 {
+    SlowPrint(color.Ize(color.Green, health_display ) )
   } else {
-    fmt.Println(color.Ize(color.Yellow, health_display ) )
+    SlowPrint(color.Ize(color.Yellow, health_display ) )
   }
 }
 
@@ -78,9 +79,9 @@ func (c *Character) dead() {
   if c.Health <= 0 {
     str := c.Name
     str += " is dead ...\n"
-    fmt.Print(color.Ize(color.Red, str ) )
+    SlowPrint(color.Ize(color.Red, str ) )
     c.Health = c.HealthMax / 2
-    fmt.Print("Fortunately, a priest who passed by was able to resurrect you.\nDon't waste your second chance.\n")
+    SlowPrint("Fortunately, a priest who passed by was able to resurrect you.\nDon't waste your second chance.\n")
   }
 }
 
@@ -95,16 +96,18 @@ func (c *Character) addToHealth(qt int) {
 }
 
 
-func (c *Character) addSkill(skill string) {
+func (c *Character) addSkill(skill string) bool {
   if !IsStrInArray(skill, c.Skills) {
     c.Skills = append(c.Skills, skill)
-    fmt.Print(c.Name, " learned the skill: ", skill, "\n")
+    SlowPrint(c.Name, " learned the skill: ", skill, "\n")
+    return true
   } else {
-    fmt.Print(c.Name, " already knows the skill: ", skill, "\n")
+    SlowPrint(c.Name, " already knows the skill: ", skill, "\n")
+    return false
   }
 }
 
 
-func InitCharacter() {
-  Player.init("Benjamin", "Elfe", 1, 100, 40, map[string]int{"Life Potion":3, "Poison Potion":1}, []string{"Punch"})
+func InitDefaultCharacter() {
+  Player.init("Benjamin", "Human", 1, 100, 40, map[string]int{"Life Potion":3, "Poison Potion":1}, []string{"Punch"})
 }

@@ -1,12 +1,13 @@
 package main
 
-
 import (
   "log"
+  "os"
 )
 
 
 func NewCharacter() {
+  os.Stdout.WriteString("\x1b[3;J\x1b[H\x1b[2J")
   var name, race string
   SlowPrint("Welcome into THE GAME!\n")
   Wait(1)
@@ -14,6 +15,16 @@ func NewCharacter() {
   SlowPrint("Ho sorry ! \nHello ", name, ", select a race for your character.\n")
   race = takeRace()
   SlowPrint("Now you are ", name, " the ", race, ".\n")
+
+  maxHealth := 100
+  switch race {
+  case "Elf":
+    maxHealth -= 20
+  case "Dwarf":
+    maxHealth += 20
+  }
+
+  Player.init(name, race, 1, maxHealth, (maxHealth / 2), map[string]int{"Life Potion":3}, []string{"Punch"})
 }
 
 func takeRace() string {
@@ -33,7 +44,7 @@ func takeRace() string {
     }
   return race
   } else {
-    takeRace()
+    race = takeRace()
   }
   return race
 }
@@ -42,5 +53,5 @@ func takeName() string {
   SlowPrint("...Erm, what is your name again?\n")
   name := TakeStrInput()
   //Capitalize name here
-  return name
+  return Capitalize(name)
 }

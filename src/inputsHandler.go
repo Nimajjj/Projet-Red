@@ -1,14 +1,13 @@
 package main
 
 import (
-  "fmt"
   "os"
   "strconv"
 )
 
 
 func TakeIntInput() int {
-  fmt.Print(">>> ")
+  SlowPrint(">>> ")
   str, _ := Reader.ReadString('\n')
   if str[:len(str)-2] == "exit" {
     os.Exit(0)
@@ -22,7 +21,7 @@ func TakeIntInput() int {
 
 
 func TakeStrInput() string {
-  fmt.Print(">>> ")
+  SlowPrint(">>> ")
   str, _ := Reader.ReadString('\n')
   if str[:len(str)-2] == "exit" {
     os.Exit(0)
@@ -31,5 +30,6 @@ func TakeStrInput() string {
 }
 
 func WaitEnter() {
+  SlowPrint("Press 'enter' to continue...")
   Reader.ReadString('\n')
 }

@@ -1,16 +1,16 @@
 package main
 
 import (
-  "fmt"
+  "strconv"
 )
 
 func OpenMerchantMenu() {
   itemsForSales := []string{"Life Potion", "Iron Sword", "Poison Potion", "Spell book: Fire Ball"}
-  fmt.Print("Merchant: Welcome, how may I help you ?\n")
-  fmt.Print(" 0 - Exit\n")
+  SlowPrint("Merchant: Welcome, how may I help you ?\n")
+  SlowPrint(" 0 - Exit\n")
   i := 0
   for _, item := range itemsForSales {
-    fmt.Print(" ", i+1, " - ", item, "\n")
+    SlowPrint(" ", strconv.Itoa(i+1), " - ", item, "\n")
     i++
   }
   input := TakeIntInput()

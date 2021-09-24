@@ -1,16 +1,16 @@
 package main
 
 import (
-  "fmt"
   "log"
+  "strconv"
 )
 
 func (c Character) displayInventory() {
   invArr := []string{"Exit"}
-  fmt.Print(c.Name, "'s inventory:\n"," 0 - Exit\n")
+  SlowPrint(c.Name, "'s inventory:\n"," 0 - Exit\n")
   i := 1
   for item, qt := range c.Inventory {
-    fmt.Print(" ", i, " - ", item, ": ", qt, "\n")
+    SlowPrint(" ", strconv.Itoa(i), " - ", item, ": ", strconv.Itoa(qt), "\n")
     invArr = append(invArr, item)
     i++
   }
@@ -31,8 +31,9 @@ func selectItem(item string) {
   case "Poison Potion":
     Player.takePoisonPotion()
   case "Spell book: Fire Ball":
-    Player.addSkill("Fire Ball")
-    Player.removeItem("Spell book: Fire Ball")
+    if Player.addSkill("Fire Ball") {
+      Player.removeItem("Spell book: Fire Ball")
+    }
   }
 }
 
@@ -49,6 +50,15 @@ func (c* Character) removeItem(item string) {
 }
 
 func (c *Character) addItem(item string, quantity int) {
+  limit, weight := 10, 0
+  for _, qt := range c.Inventory {
+    weight += qt
+  }
+  if weight >= limit {
+    SlowPrint("The inventory of ", c.Name, " is full.\n")
+    return
+  }
+  SlowPrint(c.Name, " get ", strconv.Itoa(quantity)," ", item, ".\n")
   c.Inventory[item] += quantity
 }
 
