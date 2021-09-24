@@ -9,7 +9,7 @@ import (
 
 func TakeIntInput() int {
   fmt.Print(">>> ")
-  str, _ := BR.ReadString('\n')
+  str, _ := Reader.ReadString('\n')
   if str[:len(str)-2] == "exit" {
     os.Exit(0)
   }
@@ -23,7 +23,7 @@ func TakeIntInput() int {
 
 func TakeStrInput() string {
   fmt.Print(">>> ")
-  str, _ := BR.ReadString('\n')
+  str, _ := Reader.ReadString('\n')
   if str[:len(str)-2] == "exit" {
     os.Exit(0)
   }
@@ -31,10 +31,5 @@ func TakeStrInput() string {
 }
 
 func WaitEnter() {
-  BR.ReadString('\n')
-}
-
-
-func DisplayMainMenu() {
-  DisplayMenu(MainMenu)
+  Reader.ReadString('\n')
 }
