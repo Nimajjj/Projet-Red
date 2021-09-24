@@ -2,23 +2,19 @@ package main
 
 import (
 	"bufio"
-	"log"
 	"os"
-	"flag"
 )
 
 var Reader *bufio.Reader
 var Player Character
+var Debug bool
 
 func main() {
-	var debugMode = false
-	flag.BoolVar(&debugMode, "debug", false, "Running debug mode.")
-	flag.Parse()
+	DebugInit()
 
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	Reader = bufio.NewReader(os.Stdin)
 
-	if debugMode {
+	if Debug {
 		InitDefaultCharacter()
 	} else {
 		NewCharacter()

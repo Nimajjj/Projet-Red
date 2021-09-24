@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"time"
 	"os"
+	"log"
+	"flag"
 )
 
 const (
@@ -58,4 +60,11 @@ func Colorize(color string, allStrings ...string) string {
 
 func Clear() {
 	os.Stdout.WriteString("\x1b[3;J\x1b[H\x1b[2J")
+}
+
+func DebugInit() {
+	flag.BoolVar(&Debug, "debug", false, "Running debug mode.")
+	flag.Parse()
+
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 }
