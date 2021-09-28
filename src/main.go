@@ -14,6 +14,8 @@ func main() {
 
 	Reader = bufio.NewReader(os.Stdin)
 
+	InitEquipments()
+	InitEnemies()
 	if Debug {
 		InitDefaultCharacter()
 	} else {

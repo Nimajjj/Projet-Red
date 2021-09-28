@@ -21,7 +21,7 @@ func NewCharacter() {
 	case "Dwarf":
 		maxHealth += 20
 	}
-	Player.init(name, race, 1, maxHealth, (maxHealth / 2), map[string]int{"Life Potion": 3}, []string{"Punch"})
+	Player.init(name, race, 1, maxHealth, (maxHealth / 2), 100, map[string]int{"Life Potion": 3}, []string{"Punch"})
 }
 
 func takeRace() string {
@@ -49,6 +49,9 @@ func takeRace() string {
 func takeName() string {
 	SlowPrint("...Erm, what is your name again?\n")
 	name := TakeStrInput()
+	if name == "" {
+		name = takeName()
+	}
 	//Capitalize name here
 	return Capitalize(name)
 }

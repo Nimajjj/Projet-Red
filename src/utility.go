@@ -21,10 +21,16 @@ const (
 )
 
 func SlowPrint(str ...string) { // Benjamin 24/09/21 <3
+	if Debug {
+		for _, str_part := range str {
+			fmt.Print(str_part)
+		}
+		return
+	}
 	for _, str_part := range str {
 		for _, char := range str_part {
 			fmt.Print(string(char))
-			time.Sleep(40 * time.Nanosecond)
+			time.Sleep(15 * time.Nanosecond)
 		}
 	}
 }

@@ -12,9 +12,11 @@ type Character struct {
 	Health    int
 	Inventory map[string]int
 	Skills    []string
+	Money int
+	Equipment map[string]Equipment
 }
 
-func (c *Character) init(name, race string, level, max_health, health int, inventory map[string]int, skills []string) {
+func (c *Character) init(name, race string, level, max_health, health, money int, inventory map[string]int, skills []string) {
 	c.Name = name
 	c.Race = race
 	c.Level = level
@@ -22,6 +24,13 @@ func (c *Character) init(name, race string, level, max_health, health int, inven
 	c.Health = health
 	c.Inventory = inventory
 	c.Skills = skills
+	c.Money = money
+	c.Equipment = map[string]Equipment{
+		"Head": Empty,
+		"Body": Empty,
+		"Foot": Empty,
+		"Weapon": Empty,
+	}
 }
 
 func (c Character) displaySheet() {
@@ -30,9 +39,14 @@ func (c Character) displaySheet() {
 	SlowPrint(" Race: ", c.Race, "\n")
 	SlowPrint(" Health: ")
 	c.printHealth()
+	SlowPrint(" Money: ", strconv.Itoa(c.Money), "\n")
 	SlowPrint(" Skills:\n")
 	for _, skill := range c.Skills {
 		SlowPrint("   -", skill, "\n")
+	}
+	SlowPrint(" Equipment:\n")
+	for slot, stuff := range c.Equipment {
+		SlowPrint("   -", slot, ": ", stuff.Name, "\n")
 	}
 	WaitEnter()
 }
@@ -57,7 +71,7 @@ func (c *Character) takePot() {
 	}
 }
 
-func (c Character) printHealth() {
+func (c Character) printHealth() string {
 	healthString := strconv.Itoa(c.Health) + "/" + strconv.Itoa(c.HealthMax) + "\n"
 	if c.Health <= (c.HealthMax / 3) {
 		SlowPrint(Colorize(Red, healthString))
@@ -66,6 +80,7 @@ func (c Character) printHealth() {
 	} else {
 		SlowPrint(Colorize(Yellow, healthString))
 	}
+	return healthString
 }
 
 func (c *Character) dead() bool {
@@ -73,6 +88,8 @@ func (c *Character) dead() bool {
 		SlowPrint(Colorize(Red, c.Name, " is dead ...\n"))
 		c.Health = c.HealthMax / 2
 		SlowPrint("Fortunately, a priest who passed by was able to resurrect you.\nDon't waste your second chance.\n")
+		WaitEnter()
+		MainMenu()
 		return true
 	}
 	return false
@@ -100,5 +117,11 @@ func (c *Character) addSkill(skill string) bool {
 }
 
 func InitDefaultCharacter() {
-	Player.init("Test Character", "Human", 1, 100, 10, map[string]int{"Life Potion": 3, "Poison Potion": 2}, []string{"Punch"})
+	var inv = map[string]int{
+		"Life Potion": 4,
+		"Adventurer Hat": 2,
+		"Adventurer Cloak": 1,
+		"Crown": 1,
+	}
+	Player.init(Colorize(Cyan, "Benjamin"), "Human", 100, 100, 100, 100, inv, []string{"Punch"})
 }

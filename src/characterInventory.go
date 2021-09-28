@@ -34,8 +34,39 @@ func selectItem(item string) {
 		if Player.addSkill("Fire Ball") {
 			Player.removeItem("Spell book: Fire Ball")
 		}
+	default:
+		if _, isIn := EquipmentList[item]; isIn {
+			Player.equip(EquipmentList[item].Slot, item)
+		}
 	}
 	WaitEnter()
+}
+
+func (c *Character) equip(slot, item string) {
+	replace := false
+	if c.hasEquipment(slot) {
+		c.addItem(c.Equipment[slot].Name, 1)
+		c.HealthMax -= c.Equipment[slot].Effect
+		replace = true
+	}
+
+	if replace {
+		SlowPrint(c.Name, " replace his '", c.Equipment[slot].Name, "' with '", item, "'.\n")
+	} else {
+		SlowPrint(c.Name, " equipped '", item, "'.\n")
+	}
+
+	c.Equipment[slot] = EquipmentList[item]
+	c.HealthMax += c.Equipment[slot].Effect
+	c.addToHealth(0)
+	c.removeItem(item)
+}
+
+func (c Character) hasEquipment(slot string) bool {
+	if c.Equipment[slot] != Empty{
+		return true
+	}
+	return false
 }
 
 func (c *Character) removeItem(item string) {
@@ -51,7 +82,7 @@ func (c *Character) removeItem(item string) {
 }
 
 func (c *Character) addItem(item string, quantity int) bool {
-	limit, weight := 10, 0
+	limit, weight := 100, 0
 	for _, qt := range c.Inventory {
 		weight += qt
 	}
@@ -63,8 +94,13 @@ func (c *Character) addItem(item string, quantity int) bool {
 	return true
 }
 
-func (c *Character) buyItem(item string) {
+func (c *Character) buyItem(item string, price int) {
+	if c.Money - price <= 0 {
+		SlowPrint(c.Name, " don't have enough money to buy '", item, "'.\n")
+		return
+	}
 	if c.addItem(item, 1) {
+		c.Money -= price
 		SlowPrint(c.Name, " buy one '", item, "'.\n")
 	}
 }
