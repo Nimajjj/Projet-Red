@@ -38,5 +38,5 @@ func InitEnemies() {
   Goblin.initEnemy(Colorize(Purple, "Goblin"), 40, 40, 6, 10, 2)
   Gnom.initEnemy(Colorize(Purple, "Gnom"), 25, 25, 3, 50, 1)
   P.initEnemy("Player", 1, 1, 1, 1, 1)
-    P.id = -1
+  P.id = -1
 }

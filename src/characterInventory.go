@@ -5,7 +5,8 @@ import (
 	"strconv"
 )
 
-func (c Character) displayInventory() {
+
+func (c Character) displayInventory(inFight bool) {
 	invArr := []string{"Exit"}
 	SlowPrint(c.Name, "'s inventory:\n", Colorize(Yellow, " 0 - Exit\n"))
 	i := 1
@@ -16,16 +17,19 @@ func (c Character) displayInventory() {
 	}
 	input := TakeIntInput()
 	if OutOfRange(input, 0, len(invArr)) {
-		c.displayInventory()
+		c.displayInventory(inFight)
 		return
 	}
-	selectItem(invArr[input])
+	selectItem(invArr[input], inFight)
 }
 
-func selectItem(item string) {
+
+func selectItem(item string, inFight bool) {
 	switch item {
 	case "Exit":
-		MainMenu()
+		if !inFight {
+			MainMenu()
+		}
 	case "Life Potion":
 		Player.takePot()
 	case "Poison Potion":
@@ -41,6 +45,7 @@ func selectItem(item string) {
 	}
 	WaitEnter()
 }
+
 
 func (c *Character) equip(slot, item string) {
 	replace := false
@@ -62,12 +67,14 @@ func (c *Character) equip(slot, item string) {
 	c.removeItem(item)
 }
 
+
 func (c Character) hasEquipment(slot string) bool {
 	if c.Equipment[slot] != Empty{
 		return true
 	}
 	return false
 }
+
 
 func (c *Character) removeItem(item string) {
 	if _, has_item := c.Inventory[item]; has_item {
@@ -80,6 +87,7 @@ func (c *Character) removeItem(item string) {
 		log.Fatal("Error try to remove unexistant item.")
 	}
 }
+
 
 func (c *Character) addItem(item string, quantity int) bool {
 	limit, weight := 100, 0
@@ -94,13 +102,18 @@ func (c *Character) addItem(item string, quantity int) bool {
 	return true
 }
 
-func (c *Character) buyItem(item string, price int) {
+
+func (c *Character) buyItem(item string, price int) string {
+	res := ""
 	if c.Money - price <= 0 {
-		SlowPrint(c.Name, " don't have enough money to buy '", item, "'.\n")
-		return
+		//SlowPrint(c.Name, " don't have enough money to buy '", item, "'.\n")
+		res = c.Name + " don't have enough money to buy '" + item + "'."
+		return res
 	}
 	if c.addItem(item, 1) {
 		c.Money -= price
-		SlowPrint(c.Name, " buy one '", item, "'.\n")
+		//SlowPrint(c.Name, " buy one '", item, "'.\n")
+		res = c.Name + " buy one '" + item + "'."
 	}
+	return res
 }

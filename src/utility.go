@@ -21,12 +21,13 @@ const (
 )
 
 func SlowPrint(str ...string) { // Benjamin 24/09/21 <3
-	if Debug {
+	if Debug || Slow {
 		for _, str_part := range str {
 			fmt.Print(str_part)
 		}
 		return
 	}
+
 	for _, str_part := range str {
 		for _, char := range str_part {
 			fmt.Print(string(char))
@@ -69,7 +70,11 @@ func Clear() {
 }
 
 func DebugInit() {
-	flag.BoolVar(&Debug, "debug", false, "Running debug mode.")
+	flag.BoolVar(&Debug, "debug", false, "Debug mode:\n Skip intro\n Disable slow print\n Init default character.")
+	flag.StringVar(&BootState, "boot", "", "Boot on a specific menu:\n i: Inventory\n m: Merchant\n b: Blacksmith\n f: Training Fight")
+	flag.BoolVar(&Slow, "s", false, "Disable slow print.")
+	flag.BoolVar(&Intro, "i", false, "Skip intro and init default character")
+
 	flag.Parse()
 
 	log.SetFlags(log.LstdFlags | log.Lshortfile)

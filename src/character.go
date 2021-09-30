@@ -97,11 +97,9 @@ func (c *Character) dead() bool {
 
 func (c *Character) addToHealth(qt int) bool {
 	c.Health += qt
-
 	if c.Health > c.HealthMax {
 		c.Health = c.HealthMax
 	}
-
 	return c.dead()
 }
 

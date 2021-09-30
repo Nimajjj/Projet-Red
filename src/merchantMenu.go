@@ -2,12 +2,18 @@ package main
 
 import (
 	"strconv"
+	"fmt"
 )
 
 var ItemsForSales map[string]int
 var ItemList []string
 
+var alreadyDisplayed bool
+
+var MerchantLogs []string
+
 func OpenMerchantMenu() {
+	Clear()
 	ItemList = []string{}
 	ItemsForSales = map[string]int{
 		"Life Potion": 14,
@@ -21,26 +27,45 @@ func OpenMerchantMenu() {
 		"Crow feathers": 1,
 		"Unicorn horn": 20,
 	}
-	SlowPrint("Merchant: Welcome, how may I help you ?\n")
-	SlowPrint(Colorize(Yellow, " 0 - Exit\n"))
+	if alreadyDisplayed {
+		fmt.Print("Merchant: Welcome, how may I help you ?\n")
+		fmt.Print(Colorize(Yellow, " 0 - Exit\n"))
+	} else {
+		SlowPrint("Merchant: Welcome, how may I help you ?\n")
+		SlowPrint(Colorize(Yellow, " 0 - Exit\n"))
+	}
 	i := 0
 	for item, price := range ItemsForSales {
 		ItemList = append(ItemList, item)
-		SlowPrint(" ", strconv.Itoa(i+1), " - ", item, ": ", strconv.Itoa(price), "$\n")
+		if alreadyDisplayed {
+			fmt.Print(" ", strconv.Itoa(i+1), " - ", item, ": ", strconv.Itoa(price), "$\n")
+		} else {
+			SlowPrint(" ", strconv.Itoa(i+1), " - ", item, ": ", strconv.Itoa(price), "$\n")
+		}
 		i++
 	}
+	for index, log := range MerchantLogs {
+		if index == len(MerchantLogs) - 1 {
+			SlowPrint(log, "\n")
+		} else {
+				fmt.Print(log, "\n")
+		}
+	}
+	SlowPrint(Player.Name, "'s money: ", Colorize(Yellow, strconv.Itoa(Player.Money), "$\n"))
+	alreadyDisplayed = true
 	AskForBuy()
 }
 
 func AskForBuy() {
 	input := TakeIntInput()
 	if input == 0 {
+		alreadyDisplayed = false
 		MainMenu()
 	}
 	if OutOfRange(input, 0, len(ItemList)) {
 		OpenMerchantMenu()
 		return
 	}
-	Player.buyItem(ItemList[input-1], ItemsForSales[ItemList[input-1]])
-	AskForBuy()
+	MerchantLogs = append(MerchantLogs, Player.buyItem(ItemList[input-1], ItemsForSales[ItemList[input-1]]) )
+	OpenMerchantMenu()
 }

@@ -25,13 +25,13 @@ func MainMenu() {
 		case "Character Sheet":
 			Player.displaySheet()
 		case "Inventory":
-			Player.displayInventory()
+			Player.displayInventory(false)
 		case "Merchant":
 			OpenMerchantMenu()
 		case "Blacksmith":
 			BlacksmithMenu()
 		case "Training Field":
-			InitFight([]Enemy{Goblin, Gnom, Gnom, Goblin}, "Training Field")
+			InitFight([]Enemy{Gnom}, "Training Field")
 		case "Exit":
 			os.Exit(0)
 		}
