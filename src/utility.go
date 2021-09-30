@@ -73,7 +73,7 @@ func DebugInit() {
 	flag.BoolVar(&Debug, "debug", false, "Debug mode:\n Skip intro\n Disable slow print\n Init default character.")
 	flag.StringVar(&BootState, "boot", "", "Boot on a specific menu:\n i: Inventory\n m: Merchant\n b: Blacksmith\n f: Training Fight")
 	flag.BoolVar(&Slow, "s", false, "Disable slow print.")
-	flag.BoolVar(&Intro, "i", false, "Skip intro and init default character")
+	flag.BoolVar(&Intro, "i", false, "Skip intro\nInit default character")
 
 	flag.Parse()
 
