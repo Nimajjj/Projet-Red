@@ -4,8 +4,9 @@ package main
 	Projet-Red 2021 Ynov
 	Borello Benjamin
 
-	Use Atom's terminal for better compatibility
+	Use Powershell 7 for better compatibility (color && cls)
 	'go run . --help' for all debug flags
+	'go run . -s' to disable slow print (you certainly saw it enough...)
 */
 
 

@@ -20,7 +20,7 @@ const (
   White = "\033[37m"
 )
 
-func SlowPrint(str ...string) { // Benjamin 24/09/21 <3
+func SlowPrint(str ...string) { // bb 24/09/21 <3
 	if Debug || Slow {
 		for _, str_part := range str {
 			fmt.Print(str_part)
@@ -31,7 +31,7 @@ func SlowPrint(str ...string) { // Benjamin 24/09/21 <3
 	for _, str_part := range str {
 		for _, char := range str_part {
 			fmt.Print(string(char))
-			time.Sleep(15 * time.Nanosecond)
+			time.Sleep(5 * time.Nanosecond)
 		}
 	}
 }

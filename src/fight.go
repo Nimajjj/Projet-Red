@@ -16,6 +16,13 @@ var Loots [][]string
 var Exps []int
 
 func InitFight(enemies []Enemy, place string) {
+  Enemies = []Enemy{}
+  Turn = []Enemy{}
+  Logs = []string{}
+  Loots = [][]string{}
+  Exps = []int{}
+  T = 1
+
   Clear()
   rand.Seed(time.Now().UnixNano())
   Enemies = enemies
@@ -141,12 +148,6 @@ func playerAction() {
       Player.gainExp(Exps[i])
       time.Sleep(500 * time.Millisecond)
     }
-
-    Enemies = []Enemy{}
-    Turn = []Enemy{}
-    Logs = []string{}
-    Loots = [][]string{}
-    T = 1
 
     WaitEnter()
     MainMenu()
