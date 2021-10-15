@@ -21,7 +21,7 @@ func NewCharacter() {
 	case "Dwarf":
 		maxHealth += 20
 	}
-	Player.init(name, race, 1, maxHealth, (maxHealth / 2), 100, map[string]int{"Life Potion": 3}, []string{"Punch"})
+	Player.init(name, race, 1, maxHealth, (maxHealth / 2), 100, map[string]int{"Life Potion": 3, "Poison Potion": 3, "Adventurer Cloak": 1}, []string{"Punch"})
 }
 
 func takeRace() string {

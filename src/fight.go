@@ -12,6 +12,8 @@ var Turn []Enemy
 var Logs = []string{}
 var T int = 1
 
+var Loots [][]string
+var Exps []int
 
 func InitFight(enemies []Enemy, place string) {
   Clear()
@@ -22,6 +24,8 @@ func InitFight(enemies []Enemy, place string) {
     enemy.id = i
     Enemies[i].id = i
     Turn = append(Turn, enemy)
+    Loots = append(Loots, enemy.LootTable)
+    Exps = append(Exps, enemy.Exp)
   }
   SlowPrint(initIntroMsg(place), "\n")
   fightMenu(place)
@@ -39,7 +43,7 @@ func fightMenu(place string) {
     hpDisplayed = Colorize(Yellow, hpDisplayed)
   }
   userMenu += hpDisplayed + "\n"
-  if Turn[0] == P {
+  if Turn[0].id == -1 {
     userMenu += "    0 - Attack\n    1 - Inventory\n"
   }
 
@@ -67,8 +71,8 @@ func fightMenu(place string) {
 
 func turnHandler() {
 
-  switch Turn[0] {
-  case P:
+  switch Turn[0].id {
+  case -1:
     playerAction()
     T++
   default:
@@ -114,7 +118,7 @@ func playerAction() {
 
   switch action {
   case 0:
-    var dmg = -10
+    var dmg = Player.Dmg * -1
     l := Player.Name + " attacked " + Enemies[target].Name + " " + strconv.Itoa(Enemies[target].id) + ": "
     l += Colorize(Red, strconv.Itoa(dmg*-1), "DMG")
     if !Enemies[target].toHealth(dmg) {
@@ -130,9 +134,18 @@ func playerAction() {
     Clear()
     SlowPrint("Congratulation ", Player.Name, "!\n")
 
+    for i, lootTable := range Loots {
+      loot := lootTable[ rand.Intn( len(lootTable) ) ]
+      Player.addItem(loot, 1)
+      SlowPrint(" ", loot, " +1\n")
+      Player.gainExp(Exps[i])
+      time.Sleep(500 * time.Millisecond)
+    }
+
     Enemies = []Enemy{}
     Turn = []Enemy{}
     Logs = []string{}
+    Loots = [][]string{}
     T = 1
 
     WaitEnter()

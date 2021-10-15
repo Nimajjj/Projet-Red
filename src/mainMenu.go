@@ -31,7 +31,7 @@ func MainMenu() {
 		case "Blacksmith":
 			BlacksmithMenu()
 		case "Training Field":
-			InitFight([]Enemy{Gnom}, "Training Field")
+			InitFight([]Enemy{Gnom, Goblin}, "Training Field")
 		case "Exit":
 			os.Exit(0)
 		}

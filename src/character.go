@@ -14,6 +14,9 @@ type Character struct {
 	Skills    []string
 	Money int
 	Equipment map[string]Equipment
+	Exp int
+	ExpCap int
+	Dmg int
 }
 
 func (c *Character) init(name, race string, level, max_health, health, money int, inventory map[string]int, skills []string) {
@@ -31,6 +34,25 @@ func (c *Character) init(name, race string, level, max_health, health, money int
 		"Foot": Empty,
 		"Weapon": Empty,
 	}
+	c.ExpCap = 100
+	c.Dmg = 10
+}
+
+func (c *Character) gainExp(qt int) {
+	c.Exp += qt
+	SlowPrint(" EXP +", strconv.Itoa(qt), " ")
+	if c.Exp >= c.ExpCap {
+		c.Level++
+		c.Exp = c.ExpCap - c.Exp
+		c.ExpCap += 50
+		c.HealthMax += 10
+		c.Health = c.HealthMax
+		c.Dmg++
+		SlowPrint(c.Name, " gain a level !!!\n")
+		SlowPrint("+10 HP Max\n+1 base DMG\n")
+		WaitEnter()
+	}
+	SlowPrint(" EXP: ", strconv.Itoa(c.Exp), "/", strconv.Itoa(c.ExpCap), "\n")
 }
 
 func (c Character) displaySheet() {
@@ -40,6 +62,8 @@ func (c Character) displaySheet() {
 	SlowPrint(" Health: ")
 	c.printHealth()
 	SlowPrint(" Money: ", strconv.Itoa(c.Money), "\n")
+	SlowPrint(" Level: ", strconv.Itoa(c.Level), "\n")
+	SlowPrint(" EXP: ", strconv.Itoa(c.Exp), "/", strconv.Itoa(c.ExpCap), "\n")
 	SlowPrint(" Skills:\n")
 	for _, skill := range c.Skills {
 		SlowPrint("   -", skill, "\n")
@@ -121,5 +145,5 @@ func InitDefaultCharacter() {
 		"Adventurer Cloak": 1,
 		"Crown": 1,
 	}
-	Player.init(Colorize(Cyan, "Benjamin"), "Human", 100, 100, 100, 100, inv, []string{"Punch"})
+	Player.init(Colorize(Cyan, "Benjamin"), "Human", 1, 100, 100, 100, inv, []string{"Punch"})
 }

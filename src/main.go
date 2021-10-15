@@ -1,8 +1,18 @@
 package main
 
+/*
+	Projet-Red 2021 Ynov
+	Borello Benjamin
+
+	Use Atom's terminal for better compatibility
+	'go run . --help' for all debug flags
+*/
+
+
 import (
 	"bufio"
 	"os"
+	"syscall"
 )
 
 var Reader *bufio.Reader
@@ -14,6 +24,10 @@ var BootState string
 var Intro bool
 
 func main() {
+	handle := syscall.Handle(os.Stdout.Fd())	// fucked up
+	kernel32DLL := syscall.NewLazyDLL("kernel32.dll")
+	setConsoleModeProc := kernel32DLL.NewProc("SetConsoleMode")
+	setConsoleModeProc.Call(uintptr(handle), 0x0001|0x0002|0x0004)
 	DebugInit()
 
 	Reader = bufio.NewReader(os.Stdin)
@@ -30,7 +44,7 @@ func main() {
 
 	switch BootState {	// -boot=case
 	case "f":
-		InitFight([]Enemy{Gnom, Gnom}, "Training Field")
+		InitFight([]Enemy{Gnom, Goblin}, "Training Field")
 	case "m":
 		OpenMerchantMenu()
 	case "i":
